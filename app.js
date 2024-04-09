@@ -1,6 +1,7 @@
 var nodemailer = require('nodemailer');
+const express = require('express');
+app = express()
 require('dotenv').config();
-
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -20,10 +21,16 @@ var mailOptions = {
   text: 'From your beautiful portfolio, go check it'
 };
 
-transporter.sendMail(mailOptions, function(error, info){
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('Email sent: ' + info.response);
-  }
-}); 
+app.get("/mail",(req,res)=>{
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          res.send(error)
+        } else {
+          res.send('Email sent: ' + info.response);
+        }
+      }); 
+})
+
+app.listen(process.env.PORT,()=>{
+    console.log("server is live");
+})
